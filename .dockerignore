@@ -1,0 +1,38 @@
+# Environment variables
+.env
+*.env
+
+# Git directory
+.git/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Virtual environment directories
+env/
+venv/
+ENV/
+.env/
+
+# Log files
+*.log
+
+# Test cache
+.pytest_cache/
+.coverage
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# IDE directories
+.idea/
+.vscode/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/

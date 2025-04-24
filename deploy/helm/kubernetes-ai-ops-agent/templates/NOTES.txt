@@ -1,0 +1,38 @@
+===============================================================
+  Kubernetes AI Operations Agent
+===============================================================
+
+Your Kubernetes AI Operations Agent has been deployed successfully!
+
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "kubernetes-ai-ops-agent.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "kubernetes-ai-ops-agent.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "kubernetes-ai-ops-agent.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "kubernetes-ai-ops-agent.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:{{ .Values.service.port }} to use your application"
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME {{ .Values.service.port }}:{{ .Values.service.targetPort }}
+{{- end }}
+
+2. Check the status of your deployment:
+   kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "kubernetes-ai-ops-agent.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+3. View logs of your AI Operations Agent:
+   kubectl logs --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "kubernetes-ai-ops-agent.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+4. Verify the service account and RBAC permissions:
+   kubectl get serviceaccount {{ include "kubernetes-ai-ops-agent.serviceAccountName" . }} --namespace {{ .Release.Namespace }}
+   kubectl get clusterrole {{ include "kubernetes-ai-ops-agent.fullname" . }}-role
+   kubectl get clusterrolebinding {{ include "kubernetes-ai-ops-agent.fullname" . }}-role-binding
