@@ -1,0 +1,6 @@
+[submodule "deps/prometheus-mcp-server"]
+	path = deps/prometheus-mcp-server
+	url = https://github.com/pab1it0/prometheus-mcp-server.git
+[submodule "deps/mcp-server-kubernetes"]
+	path = deps/mcp-server-kubernetes
+	url = https://github.com/Flux159/mcp-server-kubernetes.git
