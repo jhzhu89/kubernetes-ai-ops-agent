@@ -106,6 +106,20 @@ cd deploy/helm
 helm install kubernetes-ai-ops ./kubernetes-ai-ops-agent -f customized.values.yaml
 ```
 
+4. Access the application using port-forward:
+
+```bash
+# Port-forward the service to access it locally
+# Use the namespace where you installed the chart (default used here as example)
+kubectl port-forward svc/kubernetes-ai-ops-agent 9000:9000 -n <NAMESPACE>
+
+# Now you can access the web interface at http://localhost:9000
+```
+
+> **Note**: Replace `<NAMESPACE>` with the namespace where you installed the Helm chart. 
+> If you installed without specifying a namespace (`-n` flag), the current context's 
+> namespace will be used (usually "default").
+
 ## Architecture
 
 The application is built with the following components:
