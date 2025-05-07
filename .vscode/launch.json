@@ -2,20 +2,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Chainlit: Debug",
+            "name": "Uvicorn: Debug",
             "type": "python",
             "request": "launch",
-            "module": "chainlit",
+            "module": "uvicorn",
             "args": [
-                "run",
-                "src/main.py",
+                "main:app",
+                "--host",
+                "0.0.0.0",
                 "--port",
                 "9000"
             ],
             "justMyCode": true,
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
-            }
+            },
+            "cwd": "${workspaceFolder}/src"
         }
     ]
 }

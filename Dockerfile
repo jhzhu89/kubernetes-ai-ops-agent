@@ -46,16 +46,22 @@ RUN pip install --no-cache-dir /app/deps/prometheus-mcp-server
 # Install the MCP server time package
 RUN pip install --no-cache-dir mcp-server-time
 
+# Set Python path for the application
+ENV PYTHONPATH=/app
+
 # Set working directory for your Chainlit app
 WORKDIR /app
 
 # Copy application code
 COPY src/ /app/src/
 COPY chainlit.md /app/
-COPY .chainlit/ /app/.chainlit/
+COPY src/.chainlit/ /app/src/.chainlit/
 
-# Expose ChainlitΓÇÖs default port
+# Set working directory to the app's src folder for uvicorn
+WORKDIR /app/src
+
+# Expose Chainlit’s default port
 EXPOSE 9000
 
-# Start your app via Chainlit
-CMD ["chainlit", "run", "src/main.py", "--host", "0.0.0.0", "--port", "9000"]
+# Start your app via uvicorn, similar to launch.json
+CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9000"]
